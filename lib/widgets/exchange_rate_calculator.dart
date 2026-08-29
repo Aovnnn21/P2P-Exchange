@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/transaction_service.dart';
 
 class ExchangeRateCalculator extends StatefulWidget {
   const ExchangeRateCalculator({super.key});
@@ -8,8 +7,6 @@ class ExchangeRateCalculator extends StatefulWidget {
   State<ExchangeRateCalculator> createState() => _ExchangeRateCalculatorState();
 }
 
-class _ExchangeRateCalculatorState extends State<ExchangeRateCalculator> {
-  final TransactionService _transactionService = TransactionService();
   final TextEditingController _amountController = TextEditingController();
   String _fromWallet = 'Kpay';
   String _toWallet = 'Uab Pay';
@@ -47,11 +44,11 @@ class _ExchangeRateCalculatorState extends State<ExchangeRateCalculator> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _fromWallet,
+                    initialvalue: _fromWallet,
                     decoration: const InputDecoration(labelText: 'From'),
                     items: ['Kpay', 'Wave Pay', 'CB Pay', 'Uab Pay']
                         .map((wallet) => DropdownMenuItem(
-                              value: wallet,
+                              initialvalue: wallet,
                               child: Text(wallet),
                             ))
                         .toList(),
@@ -63,11 +60,11 @@ class _ExchangeRateCalculatorState extends State<ExchangeRateCalculator> {
                 const Icon(Icons.arrow_forward),
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _toWallet,
+                    initialvalue: _toWallet,
                     decoration: const InputDecoration(labelText: 'To'),
                     items: ['Kpay', 'Wave Pay', 'CB Pay', 'Uab Pay']
                         .map((wallet) => DropdownMenuItem(
-                              value: wallet,
+                              initialvalue: wallet,
                               child: Text(wallet),
                             ))
                         .toList(),
