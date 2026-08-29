@@ -25,14 +25,18 @@ class TwoFactorService {
     return 'otpauth://totp/P2PExchange:$email?secret=$secret&issuer=P2PExchange';
   }
 
-  // Verify OTP Code
+  // Verify OTP Code (Updated for otp ^3.1.2)
   bool verifyOTP(String secret, String code) {
-    return OTP.verifyTOTP(
-      secret,
-      DateTime.now().millisecondsSinceEpoch,
-      userCode: code,
-      algorithm: Algorithm.SHA1,
-    );
+    try {
+      final generatedCode = OTP.generateTOTPCodeString(
+        secret,
+        DateTime.now().millisecondsSinceEpoch,
+        algorithm: Algorithm.SHA1,
+      );
+      return generatedCode == code;
+    } catch (e) {
+      return false;
+    }
   }
 
   // Enable 2FA
