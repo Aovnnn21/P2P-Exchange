@@ -14,12 +14,12 @@ class SearchService {
     bool ascending = false,
   }) async {
     var queryBuilder = _client
-        .from('exchange_listings')
-        .select('''
-          *,
-          seller:profiles!seller_id(username, full_name, avatar_url, completion_rate, total_trades)
-        ''')
-        .eq('is_active', true);
+    .from('exchange_listings')
+    .select('''
+      *,
+      seller:profiles!seller_id(username, full_name, avatar_url, completion_rate, total_trades)
+    ''')
+    .eq('is_active', true);
 
     // Search by username
     if (query != null && query.isNotEmpty) {
