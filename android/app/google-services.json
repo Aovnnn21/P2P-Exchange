@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "573295825064",
+    "project_id": "p2p-exchange-ed266",
+    "storage_bucket": "p2p-exchange-ed266.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573295825064:android:09c93b4c10c5e5836ab29d",
+        "android_client_info": {
+          "package_name": "com.p2p_exchange.mm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ2t2gJXnTE43AyVH-GXcv_G9HgwYaxa0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
