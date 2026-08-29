@@ -24,8 +24,8 @@ dependencies:
 
   # Utilities & UI
   shared_preferences: ^2.2.2
-  uuid: ^4.0.0
-  intl: ^0.18.1
+    uuid: ^4.0.0
+  intl: ^0.20.3
   url_launcher: ^6.2.1
   http: ^1.1.0
   share_plus: ^7.2.1
