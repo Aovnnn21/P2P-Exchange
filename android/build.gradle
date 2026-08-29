@@ -1,3 +1,8 @@
+plugins {
+    // This makes the flutter extension available to subprojects
+    id "dev.flutter.flutter-gradle-plugin" apply false
+}
+
 allprojects {
     repositories {
         google()
@@ -6,11 +11,9 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
-
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
-
 subprojects {
     project.evaluationDependsOn(":app")
 }
