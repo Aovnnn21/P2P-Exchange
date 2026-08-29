@@ -41,11 +41,12 @@ android {
     }
 
     defaultConfig {
+        applicationId "com.example.p2p_exchange_app"
         minSdk 21
         targetSdk 34
-        # ...
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
     }
-}
 
     buildTypes {
         release {
