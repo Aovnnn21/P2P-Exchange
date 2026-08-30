@@ -1,115 +1,61 @@
 import 'package:flutter/material.dart';
 
 class ExchangeRateCalculator extends StatefulWidget {
-  const ExchangeRateCalculator({super.key});
+  const ExchangeRateCalculator({Key? key}) : super(key: key);
 
   @override
   State<ExchangeRateCalculator> createState() => _ExchangeRateCalculatorState();
 }
 
-  final TextEditingController _amountController = TextEditingController();
-  String _fromWallet = 'Kpay';
-  String _toWallet = 'Uab Pay';
-  double _currentRate = 2.1;
-  double _calculatedAmount = 0;
+class _ExchangeRateCalculatorState extends State<ExchangeRateCalculator> {
+  // သင့်ရဲ့ Variable များကို ဤနေရာတွင် ကြေညာပါ
+  String? _fromWallet;
+  String? _toWallet;
+  final List<String> wallets = ['MMK', 'USD', 'THB']; // ဥပမာ Wallet List
 
   @override
   void initState() {
-    super.initState();
-    _amountController.addListener(_calculate);
-  }
-
-  void _calculate() {
-    final amount = double.tryParse(_amountController.text) ?? 0;
-    setState(() {
-      _calculatedAmount = amount / _currentRate;
-    });
+    super.initState(); // အမှားပြင်: Class အတွင်းသို့ ရောက်ရှိသွားပါပြီ
+    // လိုအပ်သော initialization များကို ဤနေရာတွင် ထားရှိပါ
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      child: Padding(
+    return Scaffold(
+      appBar: AppBar(title: const Text('Exchange Rate Calculator')),
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Exchange Rate Calculator',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // From Wallet Dropdown
+            DropdownButtonFormField<String>(
+              initialValue: _fromWallet, // ပြင်ဆင်ထားသည်: 'initialvalue' မှ 'initialValue' (V အကြီး) သို့ ပြောင်းသည်
+              decoration: const InputDecoration(labelText: 'From Wallet'),
+              items: wallets.map((wallet) {
+                return DropdownMenuItem<String>(
+                  value: wallet, // ပြင်ဆင်ထားသည်: 'initialvalue' မှ 'value' သို့ ပြောင်းသည်
+                  child: Text(wallet),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() => _fromWallet = value!); // အမှားပြင်: Class အတွင်းရောက်သွား၍ setState ကို သိရှိပါပြီ
+              },
             ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    initialvalue: _fromWallet,
-                    decoration: const InputDecoration(labelText: 'From'),
-                    items: ['Kpay', 'Wave Pay', 'CB Pay', 'Uab Pay']
-                        .map((wallet) => DropdownMenuItem(
-                              initialvalue: wallet,
-                              child: Text(wallet),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() => _fromWallet = value!);
-                    },
-                  ),
-                ),
-                const Icon(Icons.arrow_forward),
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    initialvalue: _toWallet,
-                    decoration: const InputDecoration(labelText: 'To'),
-                    items: ['Kpay', 'Wave Pay', 'CB Pay', 'Uab Pay']
-                        .map((wallet) => DropdownMenuItem(
-                              initialvalue: wallet,
-                              child: Text(wallet),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() => _toWallet = value!);
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _amountController,
-              decoration: const InputDecoration(
-                labelText: 'Amount (MMK)',
-                prefixIcon: Icon(Icons.attach_money),
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('You Receive:', style: TextStyle(fontSize: 16)),
-                  Text(
-                    '${_calculatedAmount.toStringAsFixed(2)} MMK',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Current Rate: 1 USD = $_currentRate MMK',
-              style: const TextStyle(color: Colors.grey),
+            const SizedBox(height: 20),
+            
+            // To Wallet Dropdown
+            DropdownButtonFormField<String>(
+              initialValue: _toWallet, // ပြင်ဆင်ထားသည်: 'initialvalue' မှ 'initialValue' (V အကြီး) သို့ ပြောင်းသည်
+              decoration: const InputDecoration(labelText: 'To Wallet'),
+              items: wallets.map((wallet) {
+                return DropdownMenuItem<String>(
+                  value: wallet, // ပြင်ဆင်ထားသည်: 'initialvalue' မှ 'value' သို့ ပြောင်းသည်
+                  child: Text(wallet),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() => _toWallet = value!); // အမှားပြင်: Class အတွင်းရောက်သွား၍ setState ကို သိရှိပါပြီ
+              },
             ),
           ],
         ),
@@ -119,7 +65,6 @@ class ExchangeRateCalculator extends StatefulWidget {
 
   @override
   void dispose() {
-    _amountController.dispose();
-    super.dispose();
+    super.dispose(); // အမှားပြင်: Class အတွင်းသို့ ရောက်ရှိသွားပါပြီ
   }
-}
+} // ဤနေရာသည် Class အဆုံးသတ်ဖြစ်ပါသည်။ ဤအောက်တွင် '}' အပိုများ လုံးဝ မရှိစေရပါ။
