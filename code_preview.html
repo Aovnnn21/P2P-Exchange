@@ -1,0 +1,2480 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2P Exchange App - Complete Source Code</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  header {
+    background: linear-gradient(135deg, #1f6feb, #58a6ff);
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  header h1 { font-size: 28px; margin-bottom: 8px; }
+  header p { opacity: 0.9; }
+  .toc {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .toc h2 { color: #58a6ff; margin-bottom: 12px; font-size: 20px; }
+  .toc ul { list-style: none; }
+  .toc li { padding: 4px 0; }
+  .toc a { color: #c9d1d9; text-decoration: none; }
+  .toc a:hover { color: #58a6ff; }
+  .file-section {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .file-header {
+    background: #21262d;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .file-header:hover { background: #30363d; }
+  .file-path {
+    font-family: 'Courier New', monospace;
+    color: #58a6ff;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .file-actions { display: flex; gap: 8px; }
+  .btn {
+    background: #238636;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: #2ea043; }
+  .btn.copy { background: #1f6feb; }
+  .btn.copy:hover { background: #388bfd; }
+  .file-content {
+    display: none;
+    padding: 0;
+    border-top: 1px solid #30363d;
+  }
+  .file-content.active { display: block; }
+  pre {
+    margin: 0;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 13px;
+    max-height: 600px;
+  }
+  code { font-family: 'Courier New', monospace; }
+  .category {
+    background: #0d1117;
+    border-left: 4px solid #58a6ff;
+    padding: 12px 20px;
+    margin: 24px 0 12px 0;
+    border-radius: 4px;
+  }
+  .category h2 { color: #58a6ff; font-size: 18px; }
+  .note {
+    background: #1c2128;
+    border-left: 4px solid #d29922;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #238636;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+  .toast.show { display: block; animation: slideIn 0.3s; }
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🚀 P2P Exchange App</h1>
+  <p>Complete Source Code - Flutter + Supabase</p>
+  <p style="margin-top: 8px; font-size: 14px;">File တစ်ခုချင်းစီကို နှိပ်ပြီး ကြည့်နိုင်ပါတယ် • Copy ခလုတ်ကို နှိပ်ပြီး Code ကို ကူးယူနိုင်ပါတယ်</p>
+</header>
+
+<div class="note">
+  <strong>⚠️ အသုံးပြုနည်း:</strong> File header ကို နှိပ်ရင် Code ကို ဖြင့်/ပိတ် ပြနိုင်ပါတယ်။ "Copy" ခလုတ်ကို နှိပ်ရင် Code အားလုံးကို Clipboard ကူးယူပြီး GitHub မှာ Paste လုပ်နိုင်ပါတယ်။
+</div>
+
+<div class="toc">
+  <h2>📋 Table of Contents</h2>
+  <ul>
+    <li><strong>📦 Configuration</strong>
+      <ul>
+        <li><a href="#pubspec">pubspec.yaml</a></li>
+        <li><a href="#main">lib/main.dart</a></li>
+      </ul>
+    </li>
+    <li><strong>⚙️ Config & Providers</strong>
+      <ul>
+        <li><a href="#supabase-config">lib/config/supabase_config.dart</a></li>
+        <li><a href="#theme-provider">lib/providers/theme_provider.dart</a></li>
+      </ul>
+    </li>
+    <li><strong>🔧 Services (9 files)</strong>
+      <ul>
+        <li><a href="#auth-service">auth_service.dart</a></li>
+        <li><a href="#two-factor-service">two_factor_service.dart</a></li>
+        <li><a href="#device-service">device_service.dart</a></li>
+        <li><a href="#wallet-deeplink">wallet_deeplink_service.dart</a></li>
+        <li><a href="#bank-api">bank_api_service.dart</a></li>
+        <li><a href="#localization">localization_service.dart</a></li>
+        <li><a href="#referral-service">referral_service.dart</a></li>
+        <li><a href="#offline-cache">offline_cache_service.dart</a></li>
+        <li><a href="#search-service">search_service.dart</a></li>
+      </ul>
+    </li>
+    <li><strong>📱 Screens (9 files)</strong>
+      <ul>
+        <li><a href="#login-screen">login_screen.dart</a></li>
+        <li><a href="#home-screen">home_screen.dart</a></li>
+        <li><a href="#p2p-market">p2p_market_screen.dart</a></li>
+        <li><a href="#wallet-screen">wallet_screen.dart</a></li>
+        <li><a href="#order-detail">order_detail_screen.dart</a></li>
+        <li><a href="#profile-screen">profile_screen.dart</a></li>
+        <li><a href="#search-screen">search_screen.dart</a></li>
+        <li><a href="#referral-screen">referral_screen.dart</a></li>
+        <li><a href="#two-factor-setup">two_factor_setup_screen.dart</a></li>
+      </ul>
+    </li>
+    <li><strong>🎨 Widgets</strong>
+      <ul>
+        <li><a href="#calculator">exchange_rate_calculator.dart</a></li>
+      </ul>
+    </li>
+    <li><strong>🤖 Android Configuration</strong>
+      <ul>
+        <li><a href="#android-manifest">AndroidManifest.xml</a></li>
+        <li><a href="#android-build">android/app/build.gradle</a></li>
+        <li><a href="#android-settings">android/settings.gradle</a></li>
+        <li><a href="#gradle-properties">android/gradle.properties</a></li>
+        <li><a href="#gradle-wrapper">gradle-wrapper.properties</a></li>
+      </ul>
+    </li>
+    <li><strong>🗄️ Database Schema</strong>
+      <ul>
+        <li><a href="#sql-schema">Supabase SQL Schema</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<!-- ==================== CONFIGURATION ==================== -->
+<div class="category"><h2>📦 Configuration</h2></div>
+
+<div class="file-section" id="pubspec">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 pubspec.yaml</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-yaml">name: p2p_exchange_app
+description: P2P Money Exchange App with Supabase
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.6.0 &lt;4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  supabase_flutter: ^2.0.0
+  provider: ^6.1.1
+  local_auth: ^2.1.7
+  device_info_plus: ^9.1.0
+  otp: ^3.1.2
+  qr_flutter: ^4.1.0
+  shared_preferences: ^2.2.2
+  uuid: ^4.0.0
+  intl: ^0.20.3
+  url_launcher: ^6.2.1
+  http: ^1.1.0
+  share_plus: ^7.2.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  firebase_core: ^3.8.0
+  firebase_crashlytics: ^4.1.5
+  firebase_analytics: ^11.3.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="main">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/main.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import 'config/supabase_config.dart';
+import 'providers/theme_provider.dart';
+import 'services/localization_service.dart';
+import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  await SupabaseConfig.initialize();
+  await Hive.initFlutter();
+  await Hive.openBox('transactions');
+  await Hive.openBox('messages');
+  await Hive.openBox('profiles');
+  
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) =&gt; ThemeProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of&lt;ThemeProvider&gt;(context);
+    return MaterialApp(
+      title: 'P2P Exchange',
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en'), Locale('my')],
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue), useMaterial3: true),
+      darkTheme: ThemeData(brightness: Brightness.dark, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), useMaterial3: true),
+      themeMode: themeProvider.themeMode,
+      home: SupabaseConfig.client.auth.currentUser != null ? const HomeScreen() : const LoginScreen(),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<!-- ==================== CONFIG & PROVIDERS ==================== -->
+<div class="category"><h2>⚙️ Config & Providers</h2></div>
+
+<div class="file-section" id="supabase-config">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/config/supabase_config.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:supabase_flutter/supabase_flutter.dart';
+
+class SupabaseConfig {
+  static const String supabaseUrl = 'YOUR_SUPABASE_URL';
+  static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+
+  static Future&lt;void&gt; initialize() async {
+    await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
+  }
+
+  static SupabaseClient get client =&gt; Supabase.instance.client;
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="theme-provider">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/providers/theme_provider.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class ThemeProvider with ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode get themeMode =&gt; _themeMode;
+
+  ThemeProvider() { _loadTheme(); }
+
+  Future&lt;void&gt; _loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    _themeMode = (prefs.getBool('isDarkMode') ?? false) ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+  }
+
+  Future&lt;void&gt; toggleTheme() async {
+    _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', _themeMode == ThemeMode.dark);
+    notifyListeners();
+  }
+}</code></pre>
+  </div>
+</div>
+
+<!-- ==================== SERVICES ==================== -->
+<div class="category"><h2>🔧 Services</h2></div>
+
+<div class="file-section" id="auth-service">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/auth_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:supabase_flutter/supabase_flutter.dart';
+import '../config/supabase_config.dart';
+import 'device_service.dart';
+
+class AuthService {
+  final SupabaseClient _client = SupabaseConfig.client;
+
+  Future&lt;AuthResponse&gt; signUp({required String email, required String password, required String username}) async {
+    final response = await _client.auth.signUp(email: email, password: password);
+    if (response.user != null) {
+      await _client.from('profiles').insert({
+        'id': response.user!.id,
+        'username': username,
+        'created_at': DateTime.now().toIso8601String()
+      });
+    }
+    return response;
+  }
+
+  Future&lt;AuthResponse&gt; signIn({required String email, required String password}) async {
+    final response = await _client.auth.signInWithPassword(email: email, password: password);
+    if (response.user != null) {
+      try { await DeviceService().registerSession(); } catch (e) { print('Device registration failed: $e'); }
+    }
+    return response;
+  }
+
+  Future&lt;void&gt; signOut() async { await _client.auth.signOut(); }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="two-factor-service">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/two_factor_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:otp/otp.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../config/supabase_config.dart';
+
+class TwoFactorService {
+  final SupabaseClient _client = SupabaseConfig.client;
+
+  String generateSecret() =&gt; OTP.randomSecret();
+
+  String getQRCodeData(String secret, String email) {
+    return 'otpauth://totp/P2PExchange:$email?secret=$secret&amp;issuer=P2PExchange';
+  }
+
+  bool verifyOTP(String secret, String code) {
+    try {
+      final generatedCode = OTP.generateTOTPCodeString(
+        secret,
+        DateTime.now().millisecondsSinceEpoch,
+        algorithm: Algorithm.SHA1,
+      );
+      return generatedCode == code;
+    } catch (e) { return false; }
+  }
+
+  Future&lt;void&gt; enable2FA(String userId, String secret) async {
+    await _client.from('two_factor_auth').upsert({
+      'user_id': userId,
+      'secret_key': secret,
+      'is_enabled': true,
+      'updated_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  Future&lt;bool&gt; is2FAEnabled(String userId) async {
+    final response = await _client.from('two_factor_auth')
+        .select('is_enabled').eq('user_id', userId).maybeSingle();
+    return response?['is_enabled'] ?? false;
+  }
+
+  Future&lt;bool&gt; verify2FADuringLogin(String userId, String code) async {
+    final response = await _client.from('two_factor_auth')
+        .select('secret_key, is_enabled').eq('user_id', userId).maybeSingle();
+    if (response == null || response['is_enabled'] == false) return true;
+    return verifyOTP(response['secret_key'], code);
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="device-service">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/device_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
+import '../config/supabase_config.dart';
+
+class DeviceService {
+  final SupabaseClient _client = SupabaseConfig.client;
+  final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
+
+  Future&lt;String&gt; getDeviceId() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      final iosInfo = await _deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor ?? 'unknown';
+    } else {
+      final androidInfo = await _deviceInfo.androidInfo;
+      return androidInfo.id ?? 'unknown';
+    }
+  }
+
+  Future&lt;String&gt; getDeviceName() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      final iosInfo = await _deviceInfo.iosInfo;
+      return iosInfo.name ?? 'iOS Device';
+    } else {
+      final androidInfo = await _deviceInfo.androidInfo;
+      return '${androidInfo.brand} ${androidInfo.model}';
+    }
+  }
+
+  Future&lt;void&gt; registerSession() async {
+    final userId = _client.auth.currentUser!.id;
+    final deviceId = await getDeviceId();
+    final deviceName = await getDeviceName();
+    final deviceType = defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android';
+    await _client.from('device_sessions').insert({
+      'user_id': userId,
+      'device_id': deviceId,
+      'device_name': deviceName,
+      'device_type': deviceType,
+      'last_active': DateTime.now().toIso8601String(),
+      'is_active': true,
+    });
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="wallet-deeplink">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/wallet_deeplink_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:url_launcher/url_launcher.dart';
+
+class WalletDeepLinkService {
+  Future&lt;void&gt; openKpay({required String phoneNumber, required double amount}) async {
+    final uri = Uri.parse('kbzpay://transfer?phone=$phoneNumber&amp;amount=$amount');
+    if (await canLaunchUrl(uri)) { await launchUrl(uri); }
+    else { await launchUrl(Uri.parse('https://www.kbzpay.com')); }
+  }
+
+  Future&lt;void&gt; openWavePay({required String phoneNumber, required double amount}) async {
+    final uri = Uri.parse('wavepay://send?phone=$phoneNumber&amp;amount=$amount');
+    if (await canLaunchUrl(uri)) { await launchUrl(uri); }
+    else { await launchUrl(Uri.parse('https://www.wavepay.com.mm')); }
+  }
+
+  Future&lt;void&gt; openUabPay({required String phoneNumber, required double amount}) async {
+    final uri = Uri.parse('uabpay://transfer?phone=$phoneNumber&amp;amount=$amount');
+    if (await canLaunchUrl(uri)) { await launchUrl(uri); }
+    else { await launchUrl(Uri.parse('https://www.uab.com.mm')); }
+  }
+
+  Future&lt;void&gt; openWallet({required String walletType, required String phoneNumber, required double amount}) async {
+    switch (walletType.toLowerCase()) {
+      case 'kpay': await openKpay(phoneNumber: phoneNumber, amount: amount); break;
+      case 'wavepay': await openWavePay(phoneNumber: phoneNumber, amount: amount); break;
+      case 'uabpay': await openUabPay(phoneNumber: phoneNumber, amount: amount); break;
+      default: throw Exception('Unsupported wallet type');
+    }
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="bank-api">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/bank_api_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class BankAPIService {
+  Future&lt;Map&lt;String, dynamic&gt;&gt; transferKBZ({
+    required String fromAccount,
+    required String toAccount,
+    required double amount,
+    required String reference,
+  }) async {
+    final response = await http.post(
+      Uri.parse('https://api.kbzbank.com/v1/transfer'),
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_KBZ_API_KEY'},
+      body: jsonEncode({'from_account': fromAccount, 'to_account': toAccount, 'amount': amount, 'reference': reference}),
+    );
+    if (response.statusCode == 200) return jsonDecode(response.body);
+    else throw Exception('KBZ Transfer failed');
+  }
+
+  Future&lt;Map&lt;String, dynamic&gt;&gt; transferCB({
+    required String fromAccount,
+    required String toAccount,
+    required double amount,
+    required String reference,
+  }) async {
+    final response = await http.post(
+      Uri.parse('https://api.cbbank.com.mm/v1/transfer'),
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_CB_API_KEY'},
+      body: jsonEncode({'from_account': fromAccount, 'to_account': toAccount, 'amount': amount, 'reference': reference}),
+    );
+    if (response.statusCode == 200) return jsonDecode(response.body);
+    else throw Exception('CB Transfer failed');
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="localization">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/localization_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+
+class AppLocalizations {
+  final Locale locale;
+  AppLocalizations(this.locale);
+
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of&lt;AppLocalizations&gt;(context, AppLocalizations)!;
+  }
+
+  static const LocalizationsDelegate&lt;AppLocalizations&gt; delegate = _AppLocalizationsDelegate();
+
+  static final Map&lt;String, Map&lt;String, String&gt;&gt; _localizedValues = {
+    'en': {
+      'app_title': 'P2P Exchange', 'login': 'Login', 'register': 'Register',
+      'email': 'Email', 'password': 'Password', 'buy': 'Buy', 'sell': 'Sell',
+      'wallet': 'Wallet', 'profile': 'Profile', 'settings': 'Settings', 'logout': 'Logout',
+    },
+    'my': {
+      'app_title': 'P2P ငွေလဲလှယ်ရေး', 'login': 'ဝင်ရောက်ရန်', 'register': 'စာရင်းသွင်းရန်',
+      'email': 'အီးမေးလ်', 'password': 'စကားဝှက်', 'buy': 'ဝယ်မည်', 'sell': 'ရောင်းမည်',
+      'wallet': 'ငွေအိတ်', 'profile': 'ပရိုဖိုင်', 'settings': 'ဆက်တင်', 'logout': 'ထွက်ရန်',
+    },
+  };
+
+  String translate(String key) =&gt; _localizedValues[locale.languageCode]?[key] ?? key;
+  String get appTitle =&gt; translate('app_title');
+  String get login =&gt; translate('login');
+  String get register =&gt; translate('register');
+}
+
+class _AppLocalizationsDelegate extends LocalizationsDelegate&lt;AppLocalizations&gt; {
+  const _AppLocalizationsDelegate();
+  @override
+  bool isSupported(Locale locale) =&gt; ['en', 'my'].contains(locale.languageCode);
+  @override
+  Future&lt;AppLocalizations&gt; load(Locale locale) async =&gt; AppLocalizations(locale);
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) =&gt; false;
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="referral-service">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/referral_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:supabase_flutter/supabase_flutter.dart';
+import '../config/supabase_config.dart';
+import 'package:uuid/uuid.dart';
+
+class ReferralService {
+  final SupabaseClient _client = SupabaseConfig.client;
+
+  String generateReferralCode() {
+    const uuid = Uuid();
+    return uuid.v4().substring(0, 8).toUpperCase();
+  }
+
+  Future&lt;void&gt; createReferralCode(String userId) async {
+    final code = generateReferralCode();
+    await _client.from('profiles').update({'referral_code': code}).eq('id', userId);
+  }
+
+  Future&lt;String?&gt; getReferralCode(String userId) async {
+    final response = await _client.from('profiles').select('referral_code').eq('id', userId).maybeSingle();
+    return response?['referral_code'];
+  }
+
+  Future&lt;Map&lt;String, dynamic&gt;&gt; getReferralStats(String userId) async {
+    final response = await _client.from('profiles')
+        .select('total_referrals, total_referral_bonus').eq('id', userId).maybeSingle();
+    return response ?? {'total_referrals': 0, 'total_referral_bonus': 0};
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="offline-cache">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/offline_cache_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:hive_flutter/hive_flutter.dart';
+
+class OfflineCacheService {
+  static Future&lt;void&gt; initialize() async {
+    await Hive.initFlutter();
+    await Hive.openBox('transactions');
+    await Hive.openBox('messages');
+    await Hive.openBox('profiles');
+  }
+
+  static Future&lt;void&gt; cacheTransactions(List&lt;Map&lt;String, dynamic&gt;&gt; transactions) async {
+    final box = Hive.box('transactions');
+    await box.put('recent_transactions', transactions);
+  }
+
+  static List&lt;Map&lt;String, dynamic&gt;&gt; getCachedTransactions() {
+    final box = Hive.box('transactions');
+    return List&lt;Map&lt;String, dynamic&gt;&gt;.from(box.get('recent_transactions') ?? []);
+  }
+
+  static Future&lt;void&gt; cacheMessages(String conversationId, List&lt;Map&lt;String, dynamic&gt;&gt; messages) async {
+    final box = Hive.box('messages');
+    await box.put(conversationId, messages);
+  }
+
+  static List&lt;Map&lt;String, dynamic&gt;&gt; getCachedMessages(String conversationId) {
+    final box = Hive.box('messages');
+    return List&lt;Map&lt;String, dynamic&gt;&gt;.from(box.get(conversationId) ?? []);
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="search-service">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/services/search_service.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:supabase_flutter/supabase_flutter.dart';
+import '../config/supabase_config.dart';
+
+class SearchService {
+  final SupabaseClient _client = SupabaseConfig.client;
+
+  Future&lt;List&lt;Map&lt;String, dynamic&gt;&gt;&gt; searchExchangers({
+    String? query,
+    String? walletType,
+    double? minRate,
+    double? maxRate,
+  }) async {
+    var qb = _client.from('exchange_listings').select('''
+      *,
+      seller:profiles!seller_id(username, full_name, avatar_url, completion_rate, total_trades)
+    ''').eq('is_active', true);
+
+    if (query != null &amp;&amp; query.isNotEmpty) qb = qb.ilike('seller.username', '%$query%');
+    if (walletType != null) qb = qb.or('from_wallet.eq.$walletType,to_wallet.eq.$walletType');
+    if (minRate != null) qb = qb.gte('rate', minRate);
+    if (maxRate != null) qb = qb.lte('rate', maxRate);
+
+    qb = qb.order('created_at', ascending: false);
+    return await qb;
+  }
+}</code></pre>
+  </div>
+</div>
+
+<!-- ==================== SCREENS ==================== -->
+<div class="category"><h2>📱 Screens</h2></div>
+
+<div class="file-section" id="login-screen">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/login_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../services/auth_service.dart';
+import '../services/two_factor_service.dart';
+import 'home_screen.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+  @override
+  State&lt;LoginScreen&gt; createState() =&gt; _LoginScreenState();
+}
+
+class _LoginScreenState extends State&lt;LoginScreen&gt; {
+  final AuthService _authService = AuthService();
+  final TwoFactorService _2faService = TwoFactorService();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _otpController = TextEditingController();
+  bool _isLoading = false;
+  bool _isLogin = true;
+  String? _currentUserId;
+
+  Future&lt;void&gt; _submit() async {
+    setState(() =&gt; _isLoading = true);
+    try {
+      if (_isLogin) {
+        final response = await _authService.signIn(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim()
+        );
+        if (response.user != null) {
+          final is2FAEnabled = await _2faService.is2FAEnabled(response.user!.id);
+          if (is2FAEnabled) {
+            _currentUserId = response.user!.id;
+            if (mounted) _show2FADialog();
+            return;
+          }
+        }
+        if (mounted) _navigateToHome();
+      } else {
+        await _authService.signUp(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+          username: 'User_${DateTime.now().millisecondsSinceEpoch}'
+        );
+        if (mounted) _navigateToHome();
+      }
+    } on AuthException catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+    } finally {
+      if (mounted) setState(() =&gt; _isLoading = false);
+    }
+  }
+
+  void _show2FADialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =&gt; AlertDialog(
+        title: const Text('Enter 2FA Code'),
+        content: TextField(
+          controller: _otpController,
+          keyboardType: TextInputType.number,
+          maxLength: 6,
+          decoration: const InputDecoration(labelText: '6-digit OTP'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              final isValid = await _2faService.verify2FADuringLogin(_currentUserId!, _otpController.text.trim());
+              if (isValid) { Navigator.pop(context); _navigateToHome(); }
+              else { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid OTP'))); }
+            },
+            child: const Text('Verify'),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _navigateToHome() {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) =&gt; const HomeScreen()));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(_isLogin ? 'Login' : 'Register')),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(controller: _emailController, decoration: const InputDecoration(labelText: 'Email'), keyboardType: TextInputType.emailAddress),
+            const SizedBox(height: 16),
+            TextField(controller: _passwordController, decoration: const InputDecoration(labelText: 'Password'), obscureText: true),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _submit,
+                child: _isLoading ? const CircularProgressIndicator() : Text(_isLogin ? 'Login' : 'Register')
+              )
+            ),
+            TextButton(
+              onPressed: () =&gt; setState(() =&gt; _isLogin = !_isLogin),
+              child: Text(_isLogin ? "Don't have an account? Register" : "Already have an account? Login")
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="home-screen">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/home_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import '../config/supabase_config.dart';
+import '../services/auth_service.dart';
+import 'login_screen.dart';
+import 'p2p_market_screen.dart';
+import 'wallet_screen.dart';
+import 'profile_screen.dart';
+import 'order_detail_screen.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+  @override
+  State&lt;HomeScreen&gt; createState() =&gt; _HomeScreenState();
+}
+
+class _HomeScreenState extends State&lt;HomeScreen&gt; {
+  int _currentIndex = 0;
+
+  final List&lt;Widget&gt; _screens = [
+    const P2PMarketScreen(),
+    const WalletScreen(),
+    const _OrdersScreen(),
+    const ProfileScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -2))],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) =&gt; setState(() =&gt; _currentIndex = index),
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Market'),
+            BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet), label: 'Wallet'),
+            BottomNavigationBarItem(icon: Icon(Icons.receipt_long), label: 'Orders'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OrdersScreen extends StatelessWidget {
+  const _OrdersScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+        elevation: 1,
+        title: const Text('My Orders', style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildOrderCard(context, 'EX-A1B2C3D4', 'CryptoKing_MM', '500 USDT', 'Pending', Colors.orange),
+          _buildOrderCard(context, 'EX-E5F6G7H8', 'YangonTrader', '1,000 USDT', 'Completed', Colors.green),
+          _buildOrderCard(context, 'EX-I9J0K1L2', 'MandalayEx', '250 USDT', 'Disputed', Colors.red),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrderCard(BuildContext context, String orderNum, String merchant, String amount, String status, Color color) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(16),
+        title: Text(orderNum, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 4),
+            Text(merchant),
+            const SizedBox(height: 4),
+            Text(amount, style: const TextStyle(fontWeight: FontWeight.w600)),
+          ],
+        ),
+        trailing: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(status, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12)),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =&gt; OrderDetailScreen(
+                orderNumber: orderNum,
+                merchantName: merchant,
+                amount: amount.split(' ')[0],
+                price: '3,850',
+                isBuy: true,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="p2p-market">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/p2p_market_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+
+class P2PMarketScreen extends StatefulWidget {
+  const P2PMarketScreen({super.key});
+  @override
+  State&lt;P2PMarketScreen&gt; createState() =&gt; _P2PMarketScreenState();
+}
+
+class _P2PMarketScreenState extends State&lt;P2PMarketScreen&gt; with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  bool isBuy = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() { setState(() { isBuy = _tabController.index == 0; }); });
+  }
+
+  @override
+  void dispose() { _tabController.dispose(); super.dispose(); }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text('P2P Trading', style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
+        actions: [
+          IconButton(icon: const Icon(Icons.headset_mic, color: Colors.black87), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.more_vert, color: Colors.black87), onPressed: () {}),
+        ],
+        bottom: TabBar(
+          controller: _tabController,
+          labelColor: Colors.blue,
+          unselectedLabelColor: Colors.grey,
+          indicatorColor: Colors.blue,
+          indicatorWeight: 3,
+          tabs: const [Tab(text: 'Buy'), Tab(text: 'Sell')],
+        ),
+      ),
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            color: Colors.white,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(8)),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.search, color: Colors.grey, size: 20),
+                        SizedBox(width: 8),
+                        Text('Search merchant', style: TextStyle(color: Colors.grey)),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(8)),
+                  child: const Icon(Icons.tune, color: Colors.black87, size: 20),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: 5,
+              itemBuilder: (context, index) =&gt; _buildMerchantCard(index),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.blue,
+        onPressed: () {},
+        icon: const Icon(Icons.add),
+        label: const Text('Post an Ad'),
+      ),
+    );
+  }
+
+  Widget _buildMerchantCard(int index) {
+    final merchants = [
+      {'name': 'CryptoKing_MM', 'trades': 1245, 'rate': '98.5%', 'price': '3,850', 'limit': '50K - 5M', 'methods': ['Kpay', 'Wave Pay']},
+      {'name': 'YangonTrader', 'trades': 890, 'rate': '99.1%', 'price': '3,855', 'limit': '100K - 10M', 'methods': ['KBZ Pay', 'CB Pay']},
+      {'name': 'MandalayEx', 'trades': 2100, 'rate': '97.8%', 'price': '3,845', 'limit': '20K - 2M', 'methods': ['Wave Pay', 'Uab Pay']},
+    ];
+    final merchant = merchants[index % merchants.length];
+
+    return Card(
+      elevation: 1,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.blue[50],
+                  child: Text(merchant['name']![0], style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(merchant['name']!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(4)),
+                            child: const Text('Verified', style: TextStyle(color: Colors.white, fontSize: 10)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text('${merchant['trades']} trades | ${merchant['rate']} completion', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Price', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                    const SizedBox(height: 4),
+                    Text('${merchant['price']} MMK', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.blue)),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text('Limits', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                    const SizedBox(height: 4),
+                    Text('${merchant['limit']} MMK', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: (merchant['methods'] as List).map((method) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: Colors.grey[300]!),
+                        ),
+                        child: Text(method, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Trading with ${merchant['name']}')),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isBuy ? Colors.green : Colors.red,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: Text(isBuy ? 'Buy' : 'Sell', style: const TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="wallet-screen">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/wallet_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+
+class WalletScreen extends StatelessWidget {
+  const WalletScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        title: const Text('My Wallet', style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(colors: [Colors.blue, Colors.blueAccent], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 6))],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Total Balance', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                const SizedBox(height: 8),
+                const Text('12,450,000 MMK', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text('≈ \$4,150 USD', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 14)),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(Icons.arrow_downward),
+                        label: const Text('Deposit'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.blue, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(Icons.arrow_upward),
+                        label: const Text('Withdraw'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.white.withOpacity(0.2), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text('My Wallets', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
+          _buildWalletTile('KPay', '09-123 456 789', Colors.purple, Icons.account_balance_wallet),
+          _buildWalletTile('Wave Pay', '09-987 654 321', Colors.orange, Icons.waves),
+          _buildWalletTile('KBZ Bank', '0123-4567-8901', Colors.green, Icons.account_balance),
+          const SizedBox(height: 24),
+          const Text('Recent Transactions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
+          _buildTransactionTile('Received from CryptoKing', '+500,000 MMK', Colors.green, Icons.arrow_downward),
+          _buildTransactionTile('Sent to YangonTrader', '-250,000 MMK', Colors.red, Icons.arrow_upward),
+          _buildTransactionTile('Deposit from KBZ', '+1,000,000 MMK', Colors.green, Icons.arrow_downward),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWalletTile(String name, String number, Color color, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: CircleAvatar(backgroundColor: color.withOpacity(0.1), child: Icon(icon, color: color)),
+        title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(number, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+      ),
+    );
+  }
+
+  Widget _buildTransactionTile(String title, String amount, Color color, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: ListTile(
+        leading: CircleAvatar(backgroundColor: color.withOpacity(0.1), child: Icon(icon, color: color, size: 20)),
+        title: Text(title, style: const TextStyle(fontSize: 14)),
+        trailing: Text(amount, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="order-detail">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/order_detail_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+
+class OrderDetailScreen extends StatefulWidget {
+  final String orderNumber, merchantName, amount, price;
+  final bool isBuy;
+
+  const OrderDetailScreen({
+    super.key,
+    required this.orderNumber,
+    required this.merchantName,
+    required this.amount,
+    required this.price,
+    required this.isBuy,
+  });
+
+  @override
+  State&lt;OrderDetailScreen&gt; createState() =&gt; _OrderDetailScreenState();
+}
+
+class _OrderDetailScreenState extends State&lt;OrderDetailScreen&gt; with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  final TextEditingController _messageController = TextEditingController();
+  final List&lt;Map&lt;String, dynamic&gt;&gt; _messages = [
+    {'text': 'Hello! I am ready to trade.', 'isMe': false, 'time': '10:30 AM'},
+    {'text': 'Hi! Please send to KPay 09-123 456 789', 'isMe': true, 'time': '10:31 AM'},
+    {'text': 'Okay, I will send now.', 'isMe': false, 'time': '10:32 AM'},
+  ];
+
+  @override
+  void initState() { super.initState(); _tabController = TabController(length: 2, vsync: this); }
+  @override
+  void dispose() { _tabController.dispose(); _messageController.dispose(); super.dispose(); }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+        elevation: 1,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.orderNumber, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+            Text(widget.merchantName, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+          ],
+        ),
+        bottom: TabBar(
+          controller: _tabController,
+          labelColor: Colors.blue,
+          unselectedLabelColor: Colors.grey,
+          indicatorColor: Colors.blue,
+          tabs: const [Tab(text: 'Order Details'), Tab(text: 'Chat')],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [_buildOrderDetailsTab(), _buildChatTab()],
+      ),
+    );
+  }
+
+  Widget _buildOrderDetailsTab() {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(color: Colors.orange.withOpacity(0.1), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.orange)),
+          child: Row(
+            children: [
+              const Icon(Icons.hourglass_empty, color: Colors.orange),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Status: Pending Payment', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.orange)),
+                    const SizedBox(height: 4),
+                    Text('Expires in 14:32', style: TextStyle(color: Colors.orange.shade700, fontSize: 12)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                _buildInfoRow('Order Type', widget.isBuy ? 'Buy USDT' : 'Sell USDT'),
+                const Divider(height: 24),
+                _buildInfoRow('Amount', '${widget.amount} USDT'),
+                const Divider(height: 24),
+                _buildInfoRow('Price', '${widget.price} MMK'),
+                const Divider(height: 24),
+                _buildInfoRow('Total', '1,925,000 MMK', isBold: true),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          height: 56,
+          child: ElevatedButton(
+            onPressed: () { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Payment proof uploaded!'))); },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+            child: const Text('I Have Paid', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value, {bool isBold = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+        Text(value, style: TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.w500, fontSize: 14)),
+      ],
+    );
+  }
+
+  Widget _buildChatTab() {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: _messages.length,
+            itemBuilder: (context, index) {
+              final msg = _messages[index];
+              return _buildMessageBubble(msg['text'], msg['isMe'], msg['time']);
+            },
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, -2))]),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _messageController,
+                  decoration: InputDecoration(hintText: 'Type a message...', border: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: BorderSide.none), fillColor: Colors.grey[100], filled: true, contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10)),
+                ),
+              ),
+              const SizedBox(width: 8),
+              CircleAvatar(
+                backgroundColor: Colors.blue,
+                child: IconButton(
+                  icon: const Icon(Icons.send, color: Colors.white, size: 20),
+                  onPressed: () {
+                    if (_messageController.text.isNotEmpty) {
+                      setState(() {
+                        _messages.add({'text': _messageController.text, 'isMe': true, 'time': 'Now'});
+                        _messageController.clear();
+                      });
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMessageBubble(String text, bool isMe, String time) {
+    return Align(
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        constraints: const BoxConstraints(maxWidth: 280),
+        decoration: BoxDecoration(
+          color: isMe ? Colors.blue : Colors.grey[200],
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(16),
+            topRight: const Radius.circular(16),
+            bottomLeft: Radius.circular(isMe ? 16 : 4),
+            bottomRight: Radius.circular(isMe ? 4 : 16),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(text, style: TextStyle(color: isMe ? Colors.white : Colors.black87)),
+            const SizedBox(height: 4),
+            Text(time, style: TextStyle(color: isMe ? Colors.white70 : Colors.grey, fontSize: 10)),
+          ],
+        ),
+      ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="profile-screen">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/profile_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+  @override
+  State&lt;ProfileScreen&gt; createState() =&gt; _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State&lt;ProfileScreen&gt; {
+  bool _darkMode = false;
+  String _language = 'English';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(backgroundColor: Colors.white, foregroundColor: Colors.black87, elevation: 1, title: const Text('Profile', style: TextStyle(fontWeight: FontWeight.bold))),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  const CircleAvatar(radius: 50, backgroundColor: Colors.blue, child: Icon(Icons.person, size: 50, color: Colors.white)),
+                  const SizedBox(height: 16),
+                  const Text('John Doe', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  const Text('john.doe@email.com', style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(color: Colors.orange.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.verified, color: Colors.orange.shade700, size: 18),
+                        const SizedBox(width: 6),
+                        Text('KYC Level 1', style: TextStyle(color: Colors.orange.shade700, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              _buildStatCard('125', 'Trades', Colors.blue),
+              const SizedBox(width: 12),
+              _buildStatCard('98.5%', 'Completion', Colors.green),
+              const SizedBox(width: 12),
+              _buildStatCard('4.9', 'Rating', Colors.orange),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              children: [
+                ListTile(leading: const Icon(Icons.security, color: Colors.blue), title: const Text('KYC Verification', style: TextStyle(fontWeight: FontWeight.bold)), subtitle: const Text('Verify your identity'), trailing: const Icon(Icons.arrow_forward_ios, size: 16), onTap: () =&gt; _showKYCDialog(context)),
+                const Divider(height: 1),
+                ListTile(leading: const Icon(Icons.credit_card, color: Colors.purple), title: const Text('Payment Methods'), subtitle: const Text('3 methods linked'), trailing: const Icon(Icons.arrow_forward_ios, size: 16)),
+                const Divider(height: 1),
+                ListTile(leading: const Icon(Icons.history, color: Colors.green), title: const Text('Trade History'), trailing: const Icon(Icons.arrow_forward_ios, size: 16)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              children: [
+                SwitchListTile(secondary: const Icon(Icons.dark_mode, color: Colors.indigo), title: const Text('Dark Mode'), value: _darkMode, onChanged: (value) =&gt; setState(() =&gt; _darkMode = value)),
+                const Divider(height: 1),
+                ListTile(leading: const Icon(Icons.language, color: Colors.teal), title: const Text('Language'), trailing: Row(mainAxisSize: MainAxisSize.min, children: [Text(_language, style: const TextStyle(color: Colors.grey)), const SizedBox(width: 8), const Icon(Icons.arrow_forward_ios, size: 16)]), onTap: () =&gt; _showLanguageDialog(context)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: OutlinedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.logout, color: Colors.red),
+              label: const Text('Logout', style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold)),
+              style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.red), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(String value, String label, Color color) {
+    return Expanded(
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(value, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color)),
+              const SizedBox(height: 4),
+              Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showKYCDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) =&gt; AlertDialog(
+        title: const Text('KYC Verification'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildKYCStep('NRC Front', true),
+            const SizedBox(height: 12),
+            _buildKYCStep('NRC Back', true),
+            const SizedBox(height: 12),
+            _buildKYCStep('Selfie Photo', false),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () =&gt; Navigator.pop(context), child: const Text('Close')),
+          ElevatedButton(onPressed: () { Navigator.pop(context); ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Documents uploaded!'))); }, child: const Text('Upload')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKYCStep(String title, bool isDone) {
+    return Row(
+      children: [
+        Icon(isDone ? Icons.check_circle : Icons.radio_button_unchecked, color: isDone ? Colors.green : Colors.grey),
+        const SizedBox(width: 12),
+        Text(title, style: TextStyle(fontWeight: isDone ? FontWeight.bold : FontWeight.normal)),
+      ],
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) =&gt; SimpleDialog(
+        title: const Text('Select Language'),
+        children: [
+          SimpleDialogOption(onPressed: () { setState(() =&gt; _language = 'English'); Navigator.pop(context); }, child: const Text('English')),
+          SimpleDialogOption(onPressed: () { setState(() =&gt; _language = 'မြန်မာ'); Navigator.pop(context); }, child: const Text('မြန်မာ')),
+        ],
+      ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="search-screen">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/search_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import '../services/search_service.dart';
+
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+  @override
+  State&lt;SearchScreen&gt; createState() =&gt; _SearchScreenState();
+}
+
+class _SearchScreenState extends State&lt;SearchScreen&gt; {
+  final SearchService _searchService = SearchService();
+  final TextEditingController _searchController = TextEditingController();
+  List&lt;Map&lt;String, dynamic&gt;&gt; _results = [];
+  bool _isLoading = false;
+
+  Future&lt;void&gt; _performSearch() async {
+    setState(() =&gt; _isLoading = true);
+    final results = await _searchService.searchExchangers(query: _searchController.text);
+    setState(() { _results = results; _isLoading = false; });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Search Exchangers')),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(hintText: 'Search by username...', prefixIcon: Icon(Icons.search)),
+              onSubmitted: (_) =&gt; _performSearch(),
+            ),
+          ),
+          Expanded(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: _results.length,
+                    itemBuilder: (context, index) {
+                      final exchanger = _results[index];
+                      final seller = exchanger['seller'];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: ListTile(
+                          leading: CircleAvatar(child: Text(seller?['username']?[0] ?? 'U')),
+                          title: Text(seller?['username'] ?? 'Unknown'),
+                          subtitle: Text('${seller?['completion_rate']}% | ${seller?['total_trades']} trades'),
+                          trailing: Text('${exchanger['rate']} MMK', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="referral-screen">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/referral_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../services/referral_service.dart';
+import '../config/supabase_config.dart';
+
+class ReferralScreen extends StatefulWidget {
+  const ReferralScreen({super.key});
+  @override
+  State&lt;ReferralScreen&gt; createState() =&gt; _ReferralScreenState();
+}
+
+class _ReferralScreenState extends State&lt;ReferralScreen&gt; {
+  final ReferralService _referralService = ReferralService();
+  String? _referralCode;
+  Map&lt;String, dynamic&gt;? _stats;
+
+  @override
+  void initState() { super.initState(); _loadReferralData(); }
+
+  Future&lt;void&gt; _loadReferralData() async {
+    final userId = SupabaseConfig.client.auth.currentUser!.id;
+    final code = await _referralService.getReferralCode(userId);
+    final stats = await _referralService.getReferralStats(userId);
+    setState(() { _referralCode = code; _stats = stats; });
+  }
+
+  Future&lt;void&gt; _copyReferralCode() async {
+    if (_referralCode != null) {
+      await Clipboard.setData(ClipboardData(text: _referralCode!));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Referral code copied!')));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Referral Program')),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const Icon(Icons.card_giftcard, size: 64, color: Colors.blue),
+                    const SizedBox(height: 16),
+                    const Text('Invite Friends &amp; Earn', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    const Text('Get 5,000 MMK for each friend who joins', style: TextStyle(color: Colors.grey)),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            if (_referralCode != null) ...[
+              const Text('Your Referral Code:', style: TextStyle(fontSize: 16)),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.blue)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_referralCode!, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 2)),
+                    IconButton(icon: const Icon(Icons.copy), onPressed: _copyReferralCode),
+                  ],
+                ),
+              ),
+            ],
+            const Spacer(),
+            ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.share),
+              label: const Text('Share Referral Code'),
+              style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="two-factor-setup">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/screens/two_factor_setup_screen.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import '../services/two_factor_service.dart';
+import '../config/supabase_config.dart';
+
+class TwoFactorSetupScreen extends StatefulWidget {
+  const TwoFactorSetupScreen({super.key});
+  @override
+  State&lt;TwoFactorSetupScreen&gt; createState() =&gt; _TwoFactorSetupScreenState();
+}
+
+class _TwoFactorSetupScreenState extends State&lt;TwoFactorSetupScreen&gt; {
+  final TwoFactorService _2faService = TwoFactorService();
+  String? _secret;
+  String? _qrData;
+  final TextEditingController _otpController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void initState() { super.initState(); _generate2FA(); }
+
+  Future&lt;void&gt; _generate2FA() async {
+    final email = SupabaseConfig.client.auth.currentUser!.email!;
+    setState(() =&gt; _isLoading = true);
+    final secret = _2faService.generateSecret();
+    final qrData = _2faService.getQRCodeData(secret, email);
+    setState(() { _secret = secret; _qrData = qrData; _isLoading = false; });
+  }
+
+  Future&lt;void&gt; _verifyAndEnable() async {
+    if (_secret == null) return;
+    final code = _otpController.text.trim();
+    if (code.length != 6) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter 6-digit code')));
+      return;
+    }
+    setState(() =&gt; _isLoading = true);
+    final isValid = _2faService.verifyOTP(_secret!, code);
+    if (isValid) {
+      final userId = SupabaseConfig.client.auth.currentUser!.id;
+      await _2faService.enable2FA(userId, _secret!);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('2FA Enabled Successfully!')));
+        Navigator.pop(context);
+      }
+    } else {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid OTP code')));
+    }
+    setState(() =&gt; _isLoading = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Setup 2FA')),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text('Scan this QR code with Google Authenticator', style: TextStyle(fontSize: 16), textAlign: TextAlign.center),
+                  const SizedBox(height: 24),
+                  if (_qrData != null) Center(child: QrImageView(data: _qrData!, version: QrVersions.auto, size: 200.0)),
+                  const SizedBox(height: 16),
+                  Text('Secret: $_secret', style: const TextStyle(fontSize: 12, color: Colors.grey), textAlign: TextAlign.center),
+                  const SizedBox(height: 24),
+                  TextField(
+                    controller: _otpController,
+                    decoration: const InputDecoration(labelText: 'Enter 6-digit OTP code', border: OutlineInputBorder()),
+                    keyboardType: TextInputType.number,
+                    maxLength: 6,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(onPressed: _verifyAndEnable, child: const Text('Verify &amp; Enable 2FA')),
+                ],
+              ),
+            ),
+    );
+  }
+}</code></pre>
+  </div>
+</div>
+
+<!-- ==================== WIDGETS ==================== -->
+<div class="category"><h2>🎨 Widgets</h2></div>
+
+<div class="file-section" id="calculator">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 lib/widgets/exchange_rate_calculator.dart</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+
+class ExchangeRateCalculator extends StatefulWidget {
+  const ExchangeRateCalculator({super.key});
+  @override
+  State&lt;ExchangeRateCalculator&gt; createState() =&gt; _ExchangeRateCalculatorState();
+}
+
+class _ExchangeRateCalculatorState extends State&lt;ExchangeRateCalculator&gt; {
+  final TextEditingController _amountController = TextEditingController();
+  String _fromWallet = 'Kpay';
+  String _toWallet = 'Uab Pay';
+  double _currentRate = 2.1;
+  double _calculatedAmount = 0;
+
+  @override
+  void initState() { super.initState(); _amountController.addListener(_calculate); }
+
+  void _calculate() {
+    final amount = double.tryParse(_amountController.text) ?? 0;
+    setState(() { _calculatedAmount = amount / _currentRate; });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.all(0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Exchange Rate Calculator', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField&lt;String&gt;(
+                    value: _fromWallet,
+                    decoration: const InputDecoration(labelText: 'From'),
+                    items: ['Kpay', 'Wave Pay', 'CB Pay', 'Uab Pay'].map((w) =&gt; DropdownMenuItem(value: w, child: Text(w))).toList(),
+                    onChanged: (v) =&gt; setState(() =&gt; _fromWallet = v!),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: Icon(Icons.arrow_forward)),
+                Expanded(
+                  child: DropdownButtonFormField&lt;String&gt;(
+                    value: _toWallet,
+                    decoration: const InputDecoration(labelText: 'To'),
+                    items: ['Kpay', 'Wave Pay', 'CB Pay', 'Uab Pay'].map((w) =&gt; DropdownMenuItem(value: w, child: Text(w))).toList(),
+                    onChanged: (v) =&gt; setState(() =&gt; _toWallet = v!),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _amountController,
+              decoration: const InputDecoration(labelText: 'Amount (MMK)', prefixIcon: Icon(Icons.attach_money)),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(8)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('You Receive:', style: TextStyle(fontSize: 16)),
+                  Text('${_calculatedAmount.toStringAsFixed(2)} MMK', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text('Current Rate: 1 USD = $_currentRate MMK', style: const TextStyle(color: Colors.grey)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() { _amountController.dispose(); super.dispose(); }
+}</code></pre>
+  </div>
+</div>
+
+<!-- ==================== ANDROID ==================== -->
+<div class="category"><h2>🤖 Android Configuration</h2></div>
+
+<div class="file-section" id="android-manifest">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 android/app/src/main/AndroidManifest.xml</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-xml">&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+
+    &lt;uses-permission android:name="android.permission.INTERNET" /&gt;
+    &lt;uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /&gt;
+    &lt;uses-permission android:name="android.permission.USE_BIOMETRIC" /&gt;
+    &lt;uses-permission android:name="android.permission.CAMERA" /&gt;
+
+    &lt;queries&gt;
+        &lt;intent&gt;
+            &lt;action android:name="android.intent.action.VIEW" /&gt;
+            &lt;category android:name="android.intent.category.BROWSABLE" /&gt;
+            &lt;data android:scheme="kbzpay" /&gt;
+        &lt;/intent&gt;
+        &lt;intent&gt;
+            &lt;action android:name="android.intent.action.VIEW" /&gt;
+            &lt;category android:name="android.intent.category.BROWSABLE" /&gt;
+            &lt;data android:scheme="wavepay" /&gt;
+        &lt;/intent&gt;
+        &lt;intent&gt;
+            &lt;action android:name="android.intent.action.VIEW" /&gt;
+            &lt;category android:name="android.intent.category.BROWSABLE" /&gt;
+            &lt;data android:scheme="uabpay" /&gt;
+        &lt;/intent&gt;
+        &lt;intent&gt;
+            &lt;action android:name="android.intent.action.VIEW" /&gt;
+            &lt;category android:name="android.intent.category.BROWSABLE" /&gt;
+            &lt;data android:scheme="https" /&gt;
+        &lt;/intent&gt;
+        &lt;intent&gt;
+            &lt;action android:name="android.intent.action.PROCESS_TEXT"/&gt;
+            &lt;data android:mimeType="text/plain"/&gt;
+        &lt;/intent&gt;
+    &lt;/queries&gt;
+
+    &lt;application
+        android:label="p2p_exchange_app"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true"&gt;
+
+        &lt;activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"&gt;
+            
+            &lt;meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@style/NormalTheme" /&gt;
+            
+            &lt;intent-filter&gt;
+                &lt;action android:name="android.intent.action.MAIN"/&gt;
+                &lt;category android:name="android.intent.category.LAUNCHER"/&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+
+        &lt;meta-data android:name="flutterEmbedding" android:value="2" /&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="android-build">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 android/app/build.gradle</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-gradle">plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader -&gt; localProperties.load(reader) }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
+def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
+
+android {
+    namespace "com.example.p2p_exchange_app"
+    compileSdk 36
+    ndkVersion "28.2.13676358"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions { jvmTarget = '17' }
+
+    defaultConfig {
+        applicationId "com.example.p2p_exchange_app"
+        minSdk 21
+        targetSdk 34
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release { signingConfig signingConfigs.debug }
+    }
+}
+
+flutter { source '../..' }
+dependencies {}</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="android-settings">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 android/settings.gradle</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-gradle">pluginManagement {
+    def flutterSdkPath = {
+        def properties = new Properties()
+        file("local.properties").withInputStream { properties.load(it) }
+        def flutterSdkPath = properties.getProperty("flutter.sdk")
+        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
+        return flutterSdkPath
+    }()
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id "dev.flutter.flutter-plugin-loader" version "1.0.0"
+    id "com.android.application" version "8.9.1" apply false
+    id "org.jetbrains.kotlin.android" version "2.0.20" apply false
+}
+
+include ":app"</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="gradle-properties">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 android/gradle.properties</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-properties">org.gradle.jvmargs=-Xmx4G -XX:MaxMetaspaceSize=2G -XX:+HeapDumpOnOutOfMemoryError
+android.useAndroidX=true
+android.enableJetifier=true</code></pre>
+  </div>
+</div>
+
+<div class="file-section" id="gradle-wrapper">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 android/gradle/wrapper/gradle-wrapper.properties</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-properties">distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.11.1-all.zip</code></pre>
+  </div>
+</div>
+
+<!-- ==================== DATABASE ==================== -->
+<div class="category"><h2>🗄️ Database Schema</h2></div>
+
+<div class="file-section" id="sql-schema">
+  <div class="file-header" onclick="toggleFile(this)">
+    <span class="file-path">📄 Supabase SQL Schema (Run in SQL Editor)</span>
+    <div class="file-actions">
+      <button class="btn copy" onclick="event.stopPropagation(); copyCode(this)">📋 Copy</button>
+    </div>
+  </div>
+  <div class="file-content">
+<pre><code class="language-sql">-- PROFILES TABLE
+CREATE TABLE profiles (
+  id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+  username TEXT UNIQUE NOT NULL,
+  full_name TEXT,
+  avatar_url TEXT,
+  phone TEXT,
+  kyc_level INTEGER DEFAULT 0,
+  completion_rate DECIMAL(5,2) DEFAULT 0,
+  total_trades INTEGER DEFAULT 0,
+  average_rating DECIMAL(3,2) DEFAULT 0,
+  referral_code TEXT UNIQUE,
+  total_referrals INTEGER DEFAULT 0,
+  total_referral_bonus DECIMAL(10,2) DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- WALLETS TABLE
+CREATE TABLE wallets (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  wallet_type TEXT NOT NULL,
+  account_number TEXT,
+  account_name TEXT,
+  is_verified BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- EXCHANGE LISTINGS
+CREATE TABLE exchange_listings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  seller_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  type TEXT NOT NULL,
+  from_wallet TEXT NOT NULL,
+  to_wallet TEXT NOT NULL,
+  rate DECIMAL(10,2) NOT NULL,
+  min_amount DECIMAL(12,2) NOT NULL,
+  max_amount DECIMAL(12,2) NOT NULL,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- TRANSACTIONS
+CREATE TABLE transactions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  order_number TEXT UNIQUE NOT NULL,
+  buyer_id UUID REFERENCES profiles(id),
+  seller_id UUID REFERENCES profiles(id),
+  from_wallet TEXT NOT NULL,
+  to_wallet TEXT NOT NULL,
+  pay_amount DECIMAL(12,2) NOT NULL,
+  receive_amount DECIMAL(12,2) NOT NULL,
+  rate DECIMAL(10,2) NOT NULL,
+  status TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- CONVERSATIONS
+CREATE TABLE conversations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  transaction_id UUID REFERENCES transactions(id) ON DELETE CASCADE,
+  buyer_id UUID REFERENCES profiles(id),
+  seller_id UUID REFERENCES profiles(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- MESSAGES
+CREATE TABLE messages (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
+  sender_id UUID REFERENCES profiles(id),
+  content TEXT NOT NULL,
+  is_read BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 2FA TABLE
+CREATE TABLE two_factor_auth (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE UNIQUE,
+  secret_key TEXT NOT NULL,
+  is_enabled BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- DEVICE SESSIONS
+CREATE TABLE device_sessions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  device_id TEXT NOT NULL,
+  device_name TEXT,
+  device_type TEXT,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- REFERRALS
+CREATE TABLE referrals (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  referrer_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  referee_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  referral_code TEXT UNIQUE NOT NULL,
+  bonus_amount DECIMAL(10,2) DEFAULT 0,
+  is_claimed BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ENABLE RLS
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE wallets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE two_factor_auth ENABLE ROW LEVEL SECURITY;
+ALTER TABLE device_sessions ENABLE ROW LEVEL SECURITY;
+
+-- BASIC POLICIES
+CREATE POLICY "Public profiles" ON profiles FOR SELECT USING (true);
+CREATE POLICY "Users insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
+CREATE POLICY "Users update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Users view own transactions" ON transactions FOR SELECT USING (auth.uid() = buyer_id OR auth.uid() = seller_id);
+CREATE POLICY "Users view own 2FA" ON two_factor_auth FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users view own sessions" ON device_sessions FOR SELECT USING (auth.uid() = user_id);
+
+-- ENABLE REALTIME
+ALTER PUBLICATION supabase_realtime ADD TABLE messages;
+ALTER PUBLICATION supabase_realtime ADD TABLE transactions;</code></pre>
+  </div>
+</div>
+
+</div>
+
+<div id="toast" class="toast">✓ Copied to clipboard!</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-dart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-gradle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-properties.min.js"></script>
+<script>
+function toggleFile(header) {
+  const content = header.nextElementSibling;
+  content.classList.toggle('active');
+}
+
+function copyCode(btn) {
+  const codeBlock = btn.closest('.file-section').querySelector('code');
+  const text = codeBlock.textContent;
+  
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+}
+
+// Auto-expand first file
+document.querySelector('.file-content').classList.add('active');
+</script>
+
+</body>
+</html>
