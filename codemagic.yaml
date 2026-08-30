@@ -1,32 +1,16 @@
-workflows:
-  android-build:
-    name: Android APK Build
-    max_build_duration: 60
-    environment:
-      vars:
-        FLUTTER_VERSION: "stable"
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: "main"
-          include: true
-          source: true
     scripts:
-      # ၁။ Package တွေကို အရင်ယူမယ်
       - name: Install dependencies
         script: |
           flutter pub get
       
-      # ၂။ Icon တွေကို အလိုအလျောက် ထုတ်မယ် (ဒီအဆင့်က အရေးအကြီးဆုံးပါ)
+      # ဒီ Command ၁ ခုတည်း run လိုက်ရင် 
+      # သင့်ရဲ့ app_icon.png (1024x1024) ကို ဖတ်ပြီး 
+      # mipmap folder ၅ ခုစလုံးအတွက် လိုအပ်တဲ့ Resolution တွေနဲ့ 
+      # ic_launcher.png ဖိုင်အစစ်တွေကို အလိုအလျောက် ဖန်တီးပေးသွားပါလိမ့်မယ်။
       - name: Generate launcher icons
         script: |
           dart run flutter_launcher_icons
       
-      # ၃။ ထို့နောက်မှ Build တင်မယ်
       - name: Build APK
         script: |
           flutter build apk --release --android-skip-build-dependency-validation
-    
-    artifacts:
-      - build/app/outputs/flutter-apk/*.apk
