@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import '../config/supabase_config.dart';
 
 class DeviceService {
@@ -7,7 +8,7 @@ class DeviceService {
   final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
 
   Future<String> getDeviceId() async {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       final iosInfo = await _deviceInfo.iosInfo;
       return iosInfo.identifierForVendor ?? 'unknown';
     } else {
@@ -17,7 +18,7 @@ class DeviceService {
   }
 
   Future<String> getDeviceName() async {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       final iosInfo = await _deviceInfo.iosInfo;
       return iosInfo.name ?? 'iOS Device';
     } else {
@@ -30,7 +31,7 @@ class DeviceService {
     final userId = _client.auth.currentUser!.id;
     final deviceId = await getDeviceId();
     final deviceName = await getDeviceName();
-    final deviceType = Theme.of(context).platform == TargetPlatform.iOS ? 'ios' : 'android';
+    final deviceType = defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android';
 
     await _client.from('device_sessions').insert({
       'user_id': userId,
@@ -40,36 +41,5 @@ class DeviceService {
       'last_active': DateTime.now().toIso8601String(),
       'is_active': true,
     });
-  }
-
-  Future<List<Map<String, dynamic>>> getActiveSessions() async {
-    final userId = _client.auth.currentUser!.id;
-    
-    final response = await _client
-        .from('device_sessions')
-        .select()
-        .eq('user_id', userId)
-        .eq('is_active', true)
-        .order('last_active', ascending: false);
-
-    return response;
-  }
-
-  Future<void> revokeSession(String sessionId) async {
-    await _client
-        .from('device_sessions')
-        .update({'is_active': false})
-        .eq('id', sessionId);
-  }
-
-  Future<void> revokeAllOtherSessions() async {
-    final userId = _client.auth.currentUser!.id;
-    final currentDeviceId = await getDeviceId();
-
-    await _client
-        .from('device_sessions')
-        .update({'is_active': false})
-        .eq('user_id', userId)
-        .neq('device_id', currentDeviceId);
   }
 }
