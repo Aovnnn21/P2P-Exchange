@@ -1,58 +1,35 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../config/supabase_config.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // သို့မဟုတ် သင့် package အမည်
 
 class SearchService {
-  final SupabaseClient _client = SupabaseConfig.client;
+  final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<List<Map<String, dynamic>>> searchExchangers({
-    String? query,
-    String? walletType,
-    double? minRate,
-    double? maxRate,
-    double? minCompletionRate,
+  // ဥပမာ Function တစ်ခု
+  Future<List<Map<String, dynamic>>> getSearchResults({
     String? sortBy,
-    bool ascending = false,
+    bool ascending = true,
   }) async {
-    var queryBuilder = _client
-    .from('exchange_listings')
-    .select('''
-      *,
-      seller:profiles!seller_id(username, full_name, avatar_url, completion_rate, total_trades)
-    ''')
-    .eq('is_active', true);
+    try {
+      // ပြင်ဆင်ထားသည်: 'PostgrestFilterBuilder' ဟု Strict Type မသတ်မှတ်ဘဲ 'var' ကို သုံးပါ။
+      // ထိုသို့သုံးမှ .filter() နှင့် .order() ရလဒ်များကို ပြဿနာမရှိဘဲ လက်ခံနိုင်မည်ဖြစ်သည်။
+      var queryBuilder = _supabase.from('your_table_name').select();
 
-    // Search by username
-    if (query != null && query.isNotEmpty) {
-      queryBuilder = queryBuilder.ilike('seller.username', '%$query%');
-    }
+      // ... သင့်ရဲ့ Filter များကို ဤနေရာတွင် ထည့်သွင်းပါ ...
+      // ဥပမာ: queryBuilder = queryBuilder.eq('status', 'active');
 
-    // Filter by wallet type
-    if (walletType != null) {
-      queryBuilder = queryBuilder
-          .or('from_wallet.eq.$walletType,to_wallet.eq.$walletType');
-    }
+      // Order ထည့်သွင်းခြင်း
+      if (sortBy != null && sortBy.isNotEmpty) {
+        queryBuilder = queryBuilder.order(sortBy, ascending: ascending);
+      } else {
+        queryBuilder = queryBuilder.order('created_at', ascending: false);
+      }
 
-    // Filter by rate range
-    if (minRate != null) {
-      queryBuilder = queryBuilder.gte('rate', minRate);
+      // Data ကို ဆွဲယူခြင်း
+      final response = await queryBuilder;
+      return List<Map<String, dynamic>>.from(response);
+      
+    } catch (e) {
+      print('Search Error: $e');
+      return [];
     }
-    if (maxRate != null) {
-      queryBuilder = queryBuilder.lte('rate', maxRate);
-    }
-
-    // Filter by completion rate
-    if (minCompletionRate != null) {
-      queryBuilder = queryBuilder.gte('seller.completion_rate', minCompletionRate);
-    }
-
-    // Sort
-    if (sortBy != null) {
-      queryBuilder = queryBuilder.order(sortBy, ascending: ascending);
-    } else {
-      queryBuilder = queryBuilder.order('created_at', ascending: false);
-    }
-
-    final response = await queryBuilder;
-    return response;
   }
 }
