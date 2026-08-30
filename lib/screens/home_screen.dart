@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import '../config/supabase_config.dart';
 import '../services/auth_service.dart';
-import '../widgets/exchange_rate_calculator.dart';
 import 'login_screen.dart';
-import 'search_screen.dart';
-import 'referral_screen.dart';
-import 'two_factor_setup_screen.dart';
+import 'p2p_market_screen.dart'; // အသစ်ထည့်လိုက်တဲ့ Screen
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,14 +13,8 @@ class HomeScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('P2P Exchange'),
+        title: const Text('P2P Exchange', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search), 
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const SearchScreen()));
-            },
-          ),
           IconButton(
             icon: const Icon(Icons.logout), 
             onPressed: () async {
@@ -35,44 +26,47 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          const ExchangeRateCalculator(),
-          const SizedBox(height: 20),
-          Card(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.card_giftcard, color: Colors.orange),
-                  title: const Text('Referral Program'),
-                  subtitle: const Text('Invite friends & earn bonus'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const ReferralScreen()));
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.swap_horiz, size: 80, color: Colors.blue),
+              const SizedBox(height: 24),
+              const Text(
+                'Welcome to P2P Exchange',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Logged in as: ${currentUser?.email ?? 'User'}',
+                style: const TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (_) => const P2PMarketScreen())
+                    );
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    elevation: 2,
+                  ),
+                  child: const Text('Go to P2P Market', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.security, color: Colors.green),
-                  title: const Text('Setup 2FA Security'),
-                  subtitle: const Text('Protect your account'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const TwoFactorSetupScreen()));
-                  },
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          Center(
-            child: Text(
-              'Logged in as: ${currentUser?.email ?? 'User'}',
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
