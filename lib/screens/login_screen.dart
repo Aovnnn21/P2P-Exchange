@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
 import '../services/two_factor_service.dart';
 import '../config/supabase_config.dart';
@@ -29,16 +30,14 @@ class _LoginScreenState extends State<LoginScreen> {
           password: _passwordController.text.trim()
         );
         
-        // Check if 2FA is enabled
         if (response.user != null) {
           final is2FAEnabled = await _2faService.is2FAEnabled(response.user!.id);
           if (is2FAEnabled) {
             _currentUserId = response.user!.id;
             if (mounted) _show2FADialog();
-            return; // Stop here, wait for OTP
+            return; 
           }
         }
-        
         if (mounted) _navigateToHome();
       } else {
         await _authService.signUp(
@@ -72,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () async {
               final isValid = await _2faService.verify2FADuringLogin(_currentUserId!, _otpController.text.trim());
               if (isValid) {
-                Navigator.pop(context); // Close dialog
+                Navigator.pop(context);
                 _navigateToHome();
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid OTP')));
@@ -102,18 +101,20 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 16),
             TextField(controller: _passwordController, decoration: const InputDecoration(labelText: 'Password'), obscureText: true),
             const SizedBox(height: 24),
-            SizedBox(width: double.infinity, child: ElevatedButton(onPressed: _isLoading ? null : _submit, child: _isLoading ? const CircularProgressIndicator() : Text(_isLogin ? 'Login' : 'Register'))),
-            TextButton(onPressed: () => setState(() => _isLogin = !_Pressed: () => setState(() => _isLogin = !_isLogin), child: Text(_isLogin ? "DonisLogin), child: Text(_isLogin ? "Don't have an account? Register" : "Already have an't have an account? Register" : "Already have an account? Login")),
-          ],
-        ),
- account? Login")),
+            SizedBox(
+              width: double.infinity, 
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _submit, 
+                child: _isLoading ? const CircularProgressIndicator() : Text(_isLogin ? 'Login' : 'Register')
+              )
+            ),
+            TextButton(
+              onPressed: () => setState(() => _isLogin = !_isLogin), 
+              child: Text(_isLogin ? "Don't have an account? Register" : "Already have an account? Login")
+            ),
           ],
         ),
       ),
-    );
-  }
-}
-```      ),
     );
   }
 }
