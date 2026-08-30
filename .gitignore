@@ -41,6 +41,9 @@ analysis_benchmark.json
 .pub-preload-cache/
 .pub/
 build/
+# Generated launcher icons (optional - commit လုပ်ချင်ရင် ဖြုတ်ထားလို့ရတယ်)
+# android/app/src/main/res/mipmap-*/ic_launcher.png
+
 flutter_*.png
 linked_*.ds
 unlinked.ds
