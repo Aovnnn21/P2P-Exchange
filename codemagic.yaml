@@ -13,22 +13,20 @@ workflows:
           include: true
           source: true
     scripts:
+      # ၁။ Package တွေကို အရင်ယူမယ်
       - name: Install dependencies
         script: |
           flutter pub get
       
+      # ၂။ Icon တွေကို အလိုအလျောက် ထုတ်မယ် (ဒီအဆင့်က အရေးအကြီးဆုံးပါ)
       - name: Generate launcher icons
         script: |
           dart run flutter_launcher_icons
       
+      # ၃။ ထို့နောက်မှ Build တင်မယ်
       - name: Build APK
         script: |
           flutter build apk --release --android-skip-build-dependency-validation
     
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
-    
-    publishing:
-      email:
-        recipients:
-          - your-aovnnn.t@gmail.com  # သင့် email ကို ထည့်ပါ
